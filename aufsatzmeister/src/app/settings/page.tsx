@@ -4,6 +4,7 @@ import { Nav } from '@/components/Nav'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { CheckCircle } from 'lucide-react'
+import { stripe } from '@/lib/stripe'
 
 export default async function SettingsPage() {
   const supabase = await createClient()
@@ -15,11 +16,21 @@ export default async function SettingsPage() {
 
   async function startCheckout() {
     'use server'
-    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/stripe/checkout`, {
-      method: 'POST',
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) redirect('/auth/login')
+
+    const session = await stripe.checkout.sessions.create({
+      mode: 'subscription',
+      payment_method_types: ['card'],
+      line_items: [{ price: process.env.STRIPE_PREMIUM_PRICE_ID!, quantity: 1 }],
+      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?upgraded=true`,
+      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/settings`,
+      customer_email: user.email,
+      metadata: { user_id: user.id },
     })
-    const { url } = await res.json()
-    redirect(url)
+
+    redirect(session.url!)
   }
 
   return (
