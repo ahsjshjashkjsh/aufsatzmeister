@@ -4,15 +4,13 @@ import { Nav } from '@/components/Nav'
 import { getDailyVocab } from '@/data/vocabulary'
 import { VocabWord } from '@/types'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { ChevronRight, CheckCircle } from 'lucide-react'
+import { ChevronRight, CheckCircle, BookMarked, Eye } from 'lucide-react'
 
-const categoryColors: Record<string, string> = {
-  verb: 'bg-blue-100 text-blue-800',
-  adjective: 'bg-green-100 text-green-800',
-  connector: 'bg-purple-100 text-purple-800',
-  noun: 'bg-orange-100 text-orange-800',
+const categoryStyles: Record<string, { bg: string; text: string; label: string }> = {
+  verb:      { bg: 'bg-blue-100',   text: 'text-blue-700',   label: 'Verb' },
+  adjective: { bg: 'bg-green-100',  text: 'text-green-700',  label: 'Adjektiv' },
+  connector: { bg: 'bg-purple-100', text: 'text-purple-700', label: 'Verbindungswort' },
+  noun:      { bg: 'bg-amber-100',  text: 'text-amber-700',  label: 'Nomen' },
 }
 
 export default function VokabularPage() {
@@ -22,6 +20,7 @@ export default function VokabularPage() {
   const [done, setDone] = useState(false)
 
   const word = words[index]
+  const style = categoryStyles[word?.category] ?? { bg: 'bg-stone-100', text: 'text-stone-700', label: word?.category }
 
   function next() {
     if (index < words.length - 1) {
@@ -34,14 +33,21 @@ export default function VokabularPage() {
 
   if (done) {
     return (
-      <div className="flex min-h-screen">
+      <div className="flex min-h-screen bg-[#FFFBF5]">
         <Nav />
-        <main className="flex-1 p-6 pb-20 md:pb-6 flex items-center justify-center">
-          <div className="text-center">
-            <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-2">Alle Wörter gelernt!</h2>
-            <p className="text-zinc-600 mb-6">Morgen gibt es neue Wörter.</p>
-            <Button onClick={() => window.location.href = '/dashboard'}>Zurück</Button>
+        <main className="flex-1 p-6 pb-24 md:pb-8 flex items-center justify-center">
+          <div className="text-center max-w-sm">
+            <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <CheckCircle className="h-12 w-12 text-green-500" />
+            </div>
+            <h2 className="text-3xl font-extrabold text-stone-900 mb-2">Alle Wörter gelernt!</h2>
+            <p className="text-stone-400 mb-8">Morgen gibt es neue Wörter. Gut gemacht!</p>
+            <Button
+              onClick={() => window.location.href = '/dashboard'}
+              className="bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-8"
+            >
+              Zurück zum Dashboard
+            </Button>
           </div>
         </main>
       </div>
@@ -49,32 +55,67 @@ export default function VokabularPage() {
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-[#FFFBF5]">
       <Nav />
-      <main className="flex-1 p-6 pb-20 md:pb-6 max-w-md">
-        <h1 className="text-2xl font-bold mb-2">Wortschatz</h1>
-        <p className="text-zinc-500 mb-8">Wort {index + 1} von {words.length}</p>
+      <main className="flex-1 p-6 pb-24 md:pb-8 max-w-md">
 
-        <Card className="min-h-48 flex flex-col justify-center items-center text-center p-8 mb-6">
-          <CardContent className="p-0">
-            <Badge className={`mb-4 ${categoryColors[word.category]}`}>
-              {word.category}
-            </Badge>
-            <h2 className="text-3xl font-bold mb-4">{word.word}</h2>
-            {revealed ? (
-              <div>
-                <p className="text-zinc-700 mb-3">{word.definition}</p>
-                <p className="text-sm text-zinc-500 italic">"{word.example}"</p>
-              </div>
-            ) : (
-              <Button variant="outline" onClick={() => setRevealed(true)}>Bedeutung zeigen</Button>
-            )}
-          </CardContent>
-        </Card>
+        {/* Header */}
+        <div className="flex items-center gap-3 mb-2">
+          <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+            <BookMarked className="h-5 w-5 text-purple-600" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-extrabold text-stone-900">Wortschatz</h1>
+          </div>
+        </div>
+        <p className="text-stone-400 text-sm mb-6 ml-[52px]">Wort {index + 1} von {words.length}</p>
+
+        {/* Progress dots */}
+        <div className="flex gap-2 mb-8">
+          {words.map((_, i) => (
+            <div
+              key={i}
+              className={`h-2 flex-1 rounded-full transition-all ${i < index ? 'bg-green-400' : i === index ? 'bg-orange-500' : 'bg-stone-200'}`}
+            />
+          ))}
+        </div>
+
+        {/* Flashcard */}
+        <div className={`rounded-3xl border-2 transition-all mb-6 overflow-hidden ${revealed ? 'border-orange-200' : 'border-stone-200'}`}>
+          {/* Category badge + word */}
+          <div className="bg-white p-8 text-center">
+            <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold mb-5 ${style.bg} ${style.text}`}>
+              {style.label}
+            </span>
+            <h2 className="text-4xl font-extrabold text-stone-900 mb-2">{word.word}</h2>
+          </div>
+
+          {/* Revealed content */}
+          {revealed ? (
+            <div className="bg-orange-50 border-t-2 border-orange-100 p-6 text-center">
+              <p className="text-stone-700 font-medium mb-3">{word.definition}</p>
+              <p className="text-sm text-stone-400 italic">„{word.example}"</p>
+            </div>
+          ) : (
+            <div className="bg-stone-50 border-t-2 border-stone-100 p-5 text-center">
+              <button
+                onClick={() => setRevealed(true)}
+                className="flex items-center gap-2 mx-auto text-stone-500 hover:text-orange-600 transition-colors font-medium text-sm"
+              >
+                <Eye className="h-4 w-4" />
+                Bedeutung zeigen
+              </button>
+            </div>
+          )}
+        </div>
 
         {revealed && (
-          <Button className="w-full" onClick={next}>
-            {index < words.length - 1 ? 'Nächstes Wort' : 'Fertig'} <ChevronRight className="ml-2 h-4 w-4" />
+          <Button
+            className="w-full h-12 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-semibold text-base"
+            onClick={next}
+          >
+            {index < words.length - 1 ? 'Nächstes Wort' : 'Fertig'}
+            <ChevronRight className="ml-2 h-4 w-4" />
           </Button>
         )}
       </main>

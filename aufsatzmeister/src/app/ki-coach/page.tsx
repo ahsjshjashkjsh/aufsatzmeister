@@ -5,7 +5,7 @@ import { KIFeedback } from '@/components/KIFeedback'
 import { FeedbackItem } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
-import { Brain, Loader2 } from 'lucide-react'
+import { Brain, Loader2, RotateCcw, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 
 export default function KICoachPage() {
@@ -46,39 +46,57 @@ export default function KICoachPage() {
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-[#FFFBF5]">
       <Nav />
-      <main className="flex-1 p-6 pb-20 md:pb-6 max-w-2xl">
-        <div className="flex items-center gap-3 mb-2">
-          <Brain className="h-6 w-6" />
-          <h1 className="text-2xl font-bold">KI-Coach</h1>
+      <main className="flex-1 p-6 pb-24 md:pb-8 max-w-2xl">
+
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-1">
+            <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
+              <Brain className="h-5 w-5 text-orange-600" />
+            </div>
+            <h1 className="text-2xl font-extrabold text-stone-900">KI-Coach</h1>
+          </div>
+          <p className="text-stone-500 ml-[52px]">Füge deinen Aufsatz ein und erhalte lehrreiches Feedback.</p>
         </div>
-        <p className="text-zinc-500 mb-8">Füge deinen Aufsatz ein und erhalte lehrreiches Feedback mit Übungen.</p>
 
         {!feedback ? (
-          <div>
-            <Textarea
-              value={text}
-              onChange={e => setText(e.target.value)}
-              placeholder="Füge hier deinen Aufsatz ein (mindestens 50 Zeichen)..."
-              className="min-h-48 mb-4"
-            />
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-zinc-400">{text.length} Zeichen</span>
-              <Button onClick={analyzeEssay} disabled={loading || text.length < 50}>
+          <div className="bg-white rounded-2xl border border-stone-100 shadow-sm overflow-hidden">
+            <div className="p-5 border-b border-stone-50">
+              <Textarea
+                value={text}
+                onChange={e => setText(e.target.value)}
+                placeholder="Füge hier deinen Aufsatz ein (mindestens 50 Zeichen)..."
+                className="min-h-56 resize-none border-0 shadow-none focus-visible:ring-0 p-0 text-stone-800 placeholder:text-stone-300 text-base"
+              />
+            </div>
+            <div className="px-5 py-4 flex items-center justify-between bg-stone-50">
+              <span className="text-sm text-stone-400">
+                {text.length} Zeichen
+                {text.length > 0 && text.length < 50 && (
+                  <span className="text-orange-500 ml-1">· noch {50 - text.length} nötig</span>
+                )}
+              </span>
+              <Button
+                onClick={analyzeEssay}
+                disabled={loading || text.length < 50}
+                className="bg-orange-500 hover:bg-orange-600 text-white rounded-xl"
+              >
                 {loading ? (
                   <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Analysiere...</>
                 ) : (
-                  <><Brain className="mr-2 h-4 w-4" /> Aufsatz analysieren</>
+                  <><Sparkles className="mr-2 h-4 w-4" /> Aufsatz analysieren</>
                 )}
               </Button>
             </div>
+
             {error && (
-              <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <div className="mx-5 mb-5 mt-1 p-4 bg-red-50 border border-red-100 rounded-xl">
                 <p className="text-red-700 text-sm">{error}</p>
                 {error.includes('Limit') && (
-                  <Link href="/settings" className="text-red-700 underline text-sm font-medium block mt-1">
-                    Jetzt upgraden →
+                  <Link href="/settings" className="text-red-600 underline text-sm font-semibold block mt-2">
+                    Jetzt auf Premium upgraden →
                   </Link>
                 )}
               </div>
@@ -86,9 +104,13 @@ export default function KICoachPage() {
           </div>
         ) : (
           <div>
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-semibold">Dein Feedback ({feedback.length} Punkte)</h2>
-              <Button variant="outline" size="sm" onClick={() => setFeedback(null)}>
+            <div className="flex items-center justify-between mb-5">
+              <div>
+                <h2 className="font-bold text-stone-900">Dein Feedback</h2>
+                <p className="text-sm text-stone-400">{feedback.length} Verbesserungspunkte</p>
+              </div>
+              <Button variant="outline" size="sm" onClick={() => setFeedback(null)} className="rounded-xl gap-2">
+                <RotateCcw className="h-4 w-4" />
                 Neuer Aufsatz
               </Button>
             </div>

@@ -4,8 +4,7 @@ import { Nav } from '@/components/Nav'
 import { MODULES } from '@/data/modules'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { Brain, Dumbbell, Flame, BookOpen } from 'lucide-react'
+import { Brain, Dumbbell, Flame, BookOpen, ArrowRight, Sparkles } from 'lucide-react'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -30,76 +29,110 @@ export default async function DashboardPage() {
     .eq('user_id', user.id)
 
   const completedModules = progress?.filter(p => p.completed).length ?? 0
+  const currentStreak = streak?.current_streak ?? 0
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-[#FFFBF5]">
       <Nav />
-      <main className="flex-1 p-6 pb-20 md:pb-6 max-w-2xl">
-        <h1 className="text-2xl font-bold mb-1">Hallo!</h1>
-        <p className="text-zinc-500 mb-8">Bereit zum Lernen?</p>
+      <main className="flex-1 p-6 pb-24 md:pb-8 max-w-2xl">
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-          <Card>
-            <CardContent className="pt-6 text-center">
-              <Flame className="h-8 w-8 mx-auto mb-2 text-orange-500" />
-              <p className="text-2xl font-bold">{streak?.current_streak ?? 0}</p>
-              <p className="text-sm text-zinc-500">Tage Streak</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="pt-6 text-center">
-              <BookOpen className="h-8 w-8 mx-auto mb-2 text-blue-500" />
-              <p className="text-2xl font-bold">{completedModules}/{MODULES.length}</p>
-              <p className="text-sm text-zinc-500">Module</p>
-            </CardContent>
-          </Card>
-          {!profile?.is_premium && (
-            <Card className="col-span-2 md:col-span-1 bg-zinc-900 text-white">
-              <CardContent className="pt-6 text-center">
-                <p className="font-semibold mb-1">Upgrade auf Premium</p>
-                <p className="text-xs text-zinc-400 mb-3">Alle Module + KI-Feedback</p>
-                <Link href="/settings">
-                  <Button size="sm" variant="secondary">9 CHF/Monat</Button>
-                </Link>
-              </CardContent>
-            </Card>
-          )}
+        {/* Greeting */}
+        <div className="mb-8">
+          <h1 className="text-2xl font-extrabold text-stone-900 mb-1">
+            Hallo! 👋
+          </h1>
+          <p className="text-stone-500">Bereit für die heutige Lerneinheit?</p>
         </div>
 
-        <h2 className="font-semibold mb-3">Nächste Aufgaben</h2>
+        {/* Stats row */}
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          {/* Streak */}
+          <div className="bg-white rounded-2xl p-5 border border-stone-100 shadow-sm">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-9 h-9 bg-orange-100 rounded-xl flex items-center justify-center">
+                <Flame className="h-5 w-5 text-orange-500" />
+              </div>
+              <span className="text-sm text-stone-500 font-medium">Streak</span>
+            </div>
+            <p className="text-3xl font-extrabold text-stone-900">{currentStreak}</p>
+            <p className="text-xs text-stone-400 mt-0.5">
+              {currentStreak === 1 ? 'Tag am Stück' : 'Tage am Stück'}
+            </p>
+          </div>
+
+          {/* Modules */}
+          <div className="bg-white rounded-2xl p-5 border border-stone-100 shadow-sm">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-9 h-9 bg-blue-100 rounded-xl flex items-center justify-center">
+                <BookOpen className="h-5 w-5 text-blue-500" />
+              </div>
+              <span className="text-sm text-stone-500 font-medium">Module</span>
+            </div>
+            <p className="text-3xl font-extrabold text-stone-900">{completedModules}<span className="text-lg text-stone-300">/{MODULES.length}</span></p>
+            <p className="text-xs text-stone-400 mt-0.5">abgeschlossen</p>
+          </div>
+        </div>
+
+        {/* Premium upsell */}
+        {!profile?.is_premium && (
+          <div className="bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl p-5 mb-6 text-white">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <Sparkles className="h-4 w-4" />
+                  <span className="font-bold text-sm">Upgrade auf Premium</span>
+                </div>
+                <p className="text-orange-100 text-sm">Alle 5 Module + unbegrenzt KI-Feedback</p>
+              </div>
+              <Link href="/settings">
+                <Button size="sm" className="bg-white text-orange-600 hover:bg-orange-50 rounded-xl font-semibold flex-shrink-0">
+                  9 CHF/Monat
+                </Button>
+              </Link>
+            </div>
+          </div>
+        )}
+
+        {/* Next tasks */}
+        <h2 className="font-bold text-stone-900 mb-3">Deine Aufgaben heute</h2>
         <div className="space-y-3">
           <Link href="/daily-practice">
-            <Card className="hover:bg-zinc-50 cursor-pointer transition-colors">
-              <CardContent className="pt-4 pb-4 flex items-center gap-4">
-                <Dumbbell className="h-6 w-6 text-zinc-600" />
-                <div>
-                  <p className="font-medium">Tagesübung</p>
-                  <p className="text-sm text-zinc-500">5 Minuten täglich</p>
-                </div>
-              </CardContent>
-            </Card>
+            <div className="bg-white rounded-2xl p-4 border border-stone-100 shadow-sm hover:shadow-md transition-all hover:border-orange-200 cursor-pointer flex items-center gap-4">
+              <div className="w-11 h-11 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                <Dumbbell className="h-5 w-5 text-green-600" />
+              </div>
+              <div className="flex-1">
+                <p className="font-semibold text-stone-900">Tagesübung</p>
+                <p className="text-sm text-stone-400">5 Minuten · Streak aufrechterhalten</p>
+              </div>
+              <ArrowRight className="h-4 w-4 text-stone-300" />
+            </div>
           </Link>
+
           <Link href="/lernpfad">
-            <Card className="hover:bg-zinc-50 cursor-pointer transition-colors">
-              <CardContent className="pt-4 pb-4 flex items-center gap-4">
-                <BookOpen className="h-6 w-6 text-zinc-600" />
-                <div>
-                  <p className="font-medium">Lernpfad fortsetzen</p>
-                  <p className="text-sm text-zinc-500">{MODULES[Math.min(completedModules, MODULES.length - 1)].title}</p>
-                </div>
-              </CardContent>
-            </Card>
+            <div className="bg-white rounded-2xl p-4 border border-stone-100 shadow-sm hover:shadow-md transition-all hover:border-orange-200 cursor-pointer flex items-center gap-4">
+              <div className="w-11 h-11 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                <BookOpen className="h-5 w-5 text-blue-600" />
+              </div>
+              <div className="flex-1">
+                <p className="font-semibold text-stone-900">Lernpfad fortsetzen</p>
+                <p className="text-sm text-stone-400">{MODULES[Math.min(completedModules, MODULES.length - 1)].title}</p>
+              </div>
+              <ArrowRight className="h-4 w-4 text-stone-300" />
+            </div>
           </Link>
+
           <Link href="/ki-coach">
-            <Card className="hover:bg-zinc-50 cursor-pointer transition-colors">
-              <CardContent className="pt-4 pb-4 flex items-center gap-4">
-                <Brain className="h-6 w-6 text-zinc-600" />
-                <div>
-                  <p className="font-medium">Aufsatz analysieren</p>
-                  <p className="text-sm text-zinc-500">KI-Feedback auf deinen Text</p>
-                </div>
-              </CardContent>
-            </Card>
+            <div className="bg-white rounded-2xl p-4 border border-stone-100 shadow-sm hover:shadow-md transition-all hover:border-orange-200 cursor-pointer flex items-center gap-4">
+              <div className="w-11 h-11 bg-orange-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                <Brain className="h-5 w-5 text-orange-600" />
+              </div>
+              <div className="flex-1">
+                <p className="font-semibold text-stone-900">Aufsatz analysieren</p>
+                <p className="text-sm text-stone-400">KI-Feedback auf deinen Text</p>
+              </div>
+              <ArrowRight className="h-4 w-4 text-stone-300" />
+            </div>
           </Link>
         </div>
       </main>
