@@ -5,8 +5,9 @@ import { Nav } from '@/components/Nav'
 import { LernModul } from '@/components/LernModul'
 import { getModule } from '@/data/modules'
 import { notFound, useRouter } from 'next/navigation'
-import { CheckCircle } from 'lucide-react'
+import { CheckCircle, ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 
 type Props = { params: Promise<{ moduleId: string }> }
 
@@ -35,19 +36,34 @@ export default function ModulePage({ params }: Props) {
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-[#FFFBF5]">
       <Nav />
-      <main className="flex-1 p-6 pb-20 md:pb-6">
+      <main className="flex-1 p-6 pb-24 md:pb-8">
         {completed ? (
           <div className="max-w-md mx-auto text-center py-16">
-            <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-2">Modul abgeschlossen!</h2>
-            <p className="text-zinc-600 mb-6">Quiz-Ergebnis: {score}%</p>
-            <Button onClick={() => router.push('/lernpfad')}>Zurück zum Lernpfad</Button>
+            <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <CheckCircle className="h-12 w-12 text-green-500" />
+            </div>
+            <h2 className="text-3xl font-extrabold text-stone-900 mb-2">Modul abgeschlossen!</h2>
+            <p className="text-stone-500 mb-2">Quiz-Ergebnis</p>
+            <p className="text-4xl font-extrabold text-orange-500 mb-8">{score}%</p>
+            <Button
+              onClick={() => router.push('/lernpfad')}
+              className="bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-8"
+            >
+              Zurück zum Lernpfad
+            </Button>
           </div>
         ) : (
-          <div>
-            <h1 className="text-2xl font-bold mb-6">{modul.title}</h1>
+          <div className="max-w-2xl">
+            <div className="flex items-center gap-3 mb-6">
+              <Link href="/lernpfad">
+                <button className="w-9 h-9 bg-white rounded-xl border border-stone-200 flex items-center justify-center hover:bg-stone-50 transition-colors">
+                  <ArrowLeft className="h-4 w-4 text-stone-500" />
+                </button>
+              </Link>
+              <h1 className="text-xl font-extrabold text-stone-900">{modul.title}</h1>
+            </div>
             <LernModul modul={modul} onComplete={handleComplete} />
           </div>
         )}
