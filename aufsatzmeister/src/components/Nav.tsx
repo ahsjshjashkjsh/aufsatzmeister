@@ -1,10 +1,11 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { BookOpen, Brain, Dumbbell, BookMarked, LayoutDashboard, Settings, Shield } from 'lucide-react'
+import { BookOpen, Brain, Dumbbell, BookMarked, LayoutDashboard, Settings, Shield, LogOut } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { createClient } from '@/lib/supabase-client'
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 const navItems = [
   { href: '/dashboard',      label: 'Dashboard',  icon: LayoutDashboard },
@@ -16,6 +17,7 @@ const navItems = [
 
 export function Nav() {
   const pathname = usePathname()
+  const router = useRouter()
   const [isAdmin, setIsAdmin] = useState(false)
 
   useEffect(() => {
@@ -26,6 +28,13 @@ export function Nav() {
       }
     })
   }, [])
+
+  async function handleLogout() {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    router.push('/auth/login')
+    router.refresh()
+  }
 
   return (
     <>
@@ -94,6 +103,16 @@ export function Nav() {
               Admin
             </Link>
           )}
+
+          <button
+            onClick={handleLogout}
+            className="group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all w-full text-stone-500 hover:bg-red-50 hover:text-red-600"
+          >
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 bg-stone-100 group-hover:bg-red-100 transition-colors">
+              <LogOut className="h-4 w-4 text-stone-400 group-hover:text-red-500" />
+            </div>
+            Abmelden
+          </button>
         </div>
       </aside>
 
