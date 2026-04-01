@@ -33,20 +33,20 @@ export default async function SettingsPage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-[#FFFBF5]">
+    <div className="min-h-screen bg-[#FFFBF5]">
       <Nav />
-      <main className="flex-1 p-6 pb-24 md:pb-8 max-w-lg">
 
+      <main className="pt-20 pb-28 md:pb-12 px-4 md:px-6 max-w-lg mx-auto">
         <div className="mb-8">
           <h1 className="text-2xl font-extrabold text-stone-900 mb-1">Einstellungen</h1>
           <p className="text-stone-500">Dein Konto & Abo</p>
         </div>
 
-        {/* Account info */}
+        {/* Account */}
         <div className="bg-white rounded-2xl p-5 border border-stone-100 shadow-sm mb-4">
           <p className="text-xs font-semibold text-stone-400 uppercase tracking-wide mb-3">Konto</p>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center font-bold text-orange-600">
+            <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center font-bold text-orange-600 text-lg">
               {user.email?.[0].toUpperCase()}
             </div>
             <p className="text-stone-700 font-medium text-sm">{user.email}</p>
@@ -60,47 +60,38 @@ export default async function SettingsPage() {
               <Crown className="h-6 w-6" />
               <p className="font-extrabold text-lg">Premium aktiv</p>
             </div>
-            <p className="text-orange-100 text-sm mb-4">Du hast Zugang zu allen Modulen und unbegrenzt KI-Feedback.</p>
+            <p className="text-orange-100 text-sm mb-4">Zugang zu allen Modulen und unbegrenzt KI-Feedback.</p>
             <div className="space-y-2">
               {['Alle 5 Module', 'Unbegrenzt KI-Feedback', 'Fortschrittsreport (PDF)'].map(f => (
                 <div key={f} className="flex items-center gap-2 text-sm">
-                  <CheckCircle className="h-4 w-4 text-white/80" />
-                  {f}
+                  <CheckCircle className="h-4 w-4 text-white/80" />{f}
                 </div>
               ))}
             </div>
           </div>
         ) : (
           <div className="bg-white rounded-2xl border border-stone-100 shadow-sm overflow-hidden">
-            {/* Top bar */}
             <div className="bg-gradient-to-r from-orange-500 to-amber-500 px-6 py-4">
               <div className="flex items-center gap-2 text-white">
                 <Sparkles className="h-5 w-5" />
                 <p className="font-bold">Upgrade auf Premium</p>
               </div>
             </div>
-
             <div className="p-6">
               <div className="flex items-baseline gap-1 mb-1">
                 <span className="text-4xl font-extrabold text-stone-900">9</span>
                 <span className="text-stone-400 font-medium">CHF / Monat</span>
               </div>
               <p className="text-stone-500 text-sm mb-5">Alles inklusive. Jederzeit kündbar.</p>
-
               <ul className="space-y-3 mb-6">
                 {['Alle 5 Module freischalten', 'Unbegrenzt KI-Feedback', 'Fortschrittsreport (PDF)', 'Neue Inhalte inklusive'].map(f => (
                   <li key={f} className="flex items-center gap-3 text-sm text-stone-700">
-                    <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
-                    {f}
+                    <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />{f}
                   </li>
                 ))}
               </ul>
-
               <form action={startCheckout}>
-                <Button
-                  type="submit"
-                  className="w-full h-12 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-semibold text-base"
-                >
+                <Button type="submit" className="w-full h-12 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-semibold text-base">
                   Jetzt upgraden — 9 CHF/Monat
                 </Button>
               </form>
@@ -109,6 +100,10 @@ export default async function SettingsPage() {
           </div>
         )}
       </main>
+
+      <footer className="hidden md:block border-t border-stone-100 py-5 text-center text-xs text-stone-400 bg-white">
+        © 2025 AufsatzMeister · Für Schülerinnen und Schüler in der DACH-Region
+      </footer>
     </div>
   )
 }

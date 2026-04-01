@@ -36,26 +36,24 @@ export default function ModulePage({ params }: Props) {
   }
 
   return (
-    <div className="flex min-h-screen bg-[#FFFBF5]">
+    <div className="min-h-screen bg-[#FFFBF5]">
       <Nav />
-      <main className="flex-1 p-6 pb-24 md:pb-8">
+
+      <main className="pt-20 pb-28 md:pb-12 px-4 md:px-6 max-w-2xl mx-auto">
         {completed ? (
-          <div className="max-w-md mx-auto text-center py-16">
+          <div className="text-center py-16">
             <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <CheckCircle className="h-12 w-12 text-green-500" />
             </div>
             <h2 className="text-3xl font-extrabold text-stone-900 mb-2">Modul abgeschlossen!</h2>
             <p className="text-stone-500 mb-2">Quiz-Ergebnis</p>
             <p className="text-4xl font-extrabold text-orange-500 mb-8">{score}%</p>
-            <Button
-              onClick={() => router.push('/lernpfad')}
-              className="bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-8"
-            >
+            <Button onClick={() => router.push('/lernpfad')} className="bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-8">
               Zurück zum Lernpfad
             </Button>
           </div>
         ) : (
-          <div className="max-w-2xl">
+          <div>
             <div className="flex items-center gap-3 mb-6">
               <Link href="/lernpfad">
                 <button className="w-9 h-9 bg-white rounded-xl border border-stone-200 flex items-center justify-center hover:bg-stone-50 transition-colors">
