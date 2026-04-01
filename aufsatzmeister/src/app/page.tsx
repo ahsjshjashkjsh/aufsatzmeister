@@ -1,65 +1,99 @@
-import Image from "next/image";
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { CheckCircle, Brain, BookOpen, Dumbbell } from 'lucide-react'
 
-export default function Home() {
+export default function LandingPage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen bg-white">
+      {/* Header */}
+      <header className="border-b px-6 py-4 flex items-center justify-between">
+        <h1 className="text-xl font-bold text-zinc-900">AufsatzMeister</h1>
+        <div className="flex gap-3">
+          <Link href="/auth/login">
+            <Button variant="outline">Anmelden</Button>
+          </Link>
+          <Link href="/auth/register">
+            <Button>Kostenlos starten</Button>
+          </Link>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </header>
+
+      {/* Hero */}
+      <section className="px-6 py-20 text-center max-w-3xl mx-auto">
+        <h2 className="text-4xl md:text-5xl font-bold text-zinc-900 mb-6">
+          Bessere Noten in Deutsch.<br />
+          <span className="text-zinc-500">In 30 Tagen.</span>
+        </h2>
+        <p className="text-lg text-zinc-600 mb-8">
+          AufsatzMeister lehrt dich Aufsätze schreiben durch strukturierte Module,
+          echtes KI-Feedback und tägliche Übungen. Kein ChatGPT, das für dich schreibt —
+          du lernst es selbst.
+        </p>
+        <div className="flex gap-3 justify-center">
+          <Link href="/auth/register">
+            <Button size="lg">Jetzt kostenlos starten</Button>
+          </Link>
+          <Link href="/auth/login">
+            <Button size="lg" variant="outline">Anmelden</Button>
+          </Link>
         </div>
-      </main>
+      </section>
+
+      {/* Features */}
+      <section className="px-6 py-16 bg-zinc-50">
+        <div className="max-w-4xl mx-auto grid md:grid-cols-3 gap-8">
+          <div className="text-center">
+            <BookOpen className="h-10 w-10 mx-auto mb-4 text-zinc-700" />
+            <h3 className="font-semibold mb-2">Strukturierter Lernpfad</h3>
+            <p className="text-zinc-600 text-sm">5 Module von Aufsatzarten bis Stil — Schritt für Schritt aufgebaut.</p>
+          </div>
+          <div className="text-center">
+            <Brain className="h-10 w-10 mx-auto mb-4 text-zinc-700" />
+            <h3 className="font-semibold mb-2">KI-Coach mit echtem Feedback</h3>
+            <p className="text-zinc-600 text-sm">Lade deinen Aufsatz hoch. Die KI erklärt Fehler und du übst sie sofort.</p>
+          </div>
+          <div className="text-center">
+            <Dumbbell className="h-10 w-10 mx-auto mb-4 text-zinc-700" />
+            <h3 className="font-semibold mb-2">5 Min täglich reichen</h3>
+            <p className="text-zinc-600 text-sm">Daily Practice hält deinen Fortschritt aufrecht — wie Duolingo für Aufsätze.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing */}
+      <section className="px-6 py-16 max-w-3xl mx-auto">
+        <h2 className="text-2xl font-bold text-center mb-10">Einfache Preise</h2>
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="border rounded-xl p-6">
+            <h3 className="font-bold text-lg mb-1">Gratis</h3>
+            <p className="text-3xl font-bold mb-4">0 CHF</p>
+            <ul className="space-y-2 text-sm text-zinc-600">
+              {['Modul 1 komplett', '1 KI-Feedback pro Monat', 'Tägliche Übungen'].map(f => (
+                <li key={f} className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" />{f}</li>
+              ))}
+            </ul>
+            <Link href="/auth/register" className="block mt-6">
+              <Button className="w-full" variant="outline">Kostenlos starten</Button>
+            </Link>
+          </div>
+          <div className="border-2 border-zinc-900 rounded-xl p-6 relative">
+            <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-zinc-900 text-white text-xs px-3 py-1 rounded-full">Empfohlen</span>
+            <h3 className="font-bold text-lg mb-1">Premium</h3>
+            <p className="text-3xl font-bold mb-4">9 CHF <span className="text-base font-normal text-zinc-500">/ Monat</span></p>
+            <ul className="space-y-2 text-sm text-zinc-600">
+              {['Alle 5 Module', 'Unbegrenzt KI-Feedback', 'Fortschrittsreport (PDF)', 'Wortschatz-Trainer'].map(f => (
+                <li key={f} className="flex items-center gap-2"><CheckCircle className="h-4 w-4 text-green-500" />{f}</li>
+              ))}
+            </ul>
+            <Link href="/auth/register" className="block mt-6">
+              <Button className="w-full">Jetzt upgraden</Button>
+            </Link>
+          </div>
+        </div>
+        <p className="text-center text-sm text-zinc-500 mt-6">
+          &quot;Wenn deine Note steigt, zahlt sich das Abo aus dem ersten besseren Zeugnis zurück.&quot;
+        </p>
+      </section>
     </div>
-  );
+  )
 }
